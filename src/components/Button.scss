@@ -1,0 +1,10 @@
+.btn {
+  background: #fff;
+  border: 1px solid #000;
+  outline: none;
+  &.dark {
+    color: #fff;
+    background: #000;
+    border-color: #fff;
+  }
+}

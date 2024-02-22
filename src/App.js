@@ -1,21 +1,29 @@
-import { useState } from "react";
+import { createContext, useState } from 'react';
+import Button from './components/Button';
+import WelcomePanel from './components/WelcomePanel';
 
-function getCount() {
-  console.log('init');
-  return 0;
-}
+// 创建一个上下文
+export const ThemeContext = createContext(null);
 
 function App() {
-  // react只在初次渲染时保存初始状态,后续渲染时会将其忽略
-  // 注意:每次渲染还是会调用此函数,只不过后续渲染会忽略函数的返回结果
-  // 可以通过传递函数本身来解决,react仅会在初次调用函数
-  const [count, setCount] = useState(getCount());
+  const [theme, setTheme] = useState('light');
 
   return (
-    <div className="App">
-      {count}
-      {/* 尝试将state设置为一个函数,但是函数却被调用了,因为react将getCount当作是一个更新函数 */}
-      <button onClick={() => setCount(getCount)}>add</button>
+    <div className='App' style={{ width: 300 }}>
+      {/* 给被包裹的组件提供上下文的值 */}
+      <ThemeContext.Provider value={theme}>
+        <WelcomePanel>
+          <Button>click</Button>
+        </WelcomePanel>
+        <label>
+          <input
+            type='checkbox'
+            checked={theme === 'dark'}
+            onChange={(e) => setTheme(e.target.checked ? 'dark' : 'light')}
+          />
+          <span>use dark mode</span>
+        </label>
+      </ThemeContext.Provider>
     </div>
   );
 }
