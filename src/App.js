@@ -1,28 +1,20 @@
 import { useState } from 'react';
-import Button from './components/Button';
-import WelcomePanel from './components/WelcomePanel';
 import Providers from './components/Providers';
+import Container from './components/Container';
 
 function App() {
     const [theme, setTheme] = useState('light');
+    const [count, setCount] = useState(0);
 
     return (
         <div className='App' style={{ width: 300 }}>
             <Providers theme={theme}>
-                <WelcomePanel>
-                    <Button>login as xiaomo</Button>
-                </WelcomePanel>
-                <label>
-                    <input
-                        type='checkbox'
-                        checked={theme === 'dark'}
-                        onChange={(e) =>
-                            setTheme(e.target.checked ? 'dark' : 'light')
-                        }
-                    />
-                    <span>use dark mode</span>
-                </label>
+                <Container theme={theme} setTheme={setTheme} />
             </Providers>
+            <div>
+                {count}
+                <button onClick={() => setCount(count + 1)}>add</button>
+            </div>
         </div>
     );
 }
