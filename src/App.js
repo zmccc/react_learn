@@ -22,7 +22,9 @@ function App() {
         handleStop();
         // 这里count一直为之前的值,是因为timer.current不会因为重新渲染而发生变化,还是过去的引用,所以取的count也是过去的值
         timer.current = setInterval(() => {
-            setCount(count + 1);
+            // react会将函数加入队列,等事件处理函数中的其他代码完成后在处理
+            // 在下次渲染期间,react将遍历队列,把处理好的state返回给你
+            setCount((c) => c + 1);
         }, 1000);
     };
 
