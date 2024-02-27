@@ -1,6 +1,6 @@
-import { useReducer } from 'react';
 import ContactList from './components/ContactList';
 import Chat from './components/Chat';
+import useReducer from './components/MyReact';
 
 const contacts = [
     { id: 0, name: 'Taylor', email: 'taylor@mail.com' },
