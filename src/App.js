@@ -1,83 +1,53 @@
-import ContactList from './components/ContactList';
-import Chat from './components/Chat';
-import useReducer from './components/MyReact';
+import { useState } from 'react';
+import AddTask from './components/AddTask';
+import TaskList from './components/TaskList';
 
-const contacts = [
-    { id: 0, name: 'Taylor', email: 'taylor@mail.com' },
-    { id: 1, name: 'Alice', email: 'alice@mail.com' },
-    { id: 2, name: 'Bob', email: 'bob@mail.com' },
+const initialTasks = [
+    { id: 0, text: 'Philosopher’s Path', done: true },
+    { id: 1, text: 'Visit the temple', done: false },
+    { id: 2, text: 'Drink matcha', done: false },
 ];
-
-// messages 有时候对象形式修改信息也很方便
-// {
-//     0: 'message'
-// }
-const initialState = {
-    selectedId: 0,
-    messages: [
-        {
-            id: 0,
-            message: '你好',
-        },
-        {
-            id: 1,
-            message: '',
-        },
-        {
-            id: 2,
-            message: '',
-        },
-    ],
-};
-
-const emailReducer = (state, action) => {
-    switch (action.type) {
-        case 'change_name': {
-            return {
-                ...state,
-                selectedId: action.contactId,
-            };
-        }
-        case 'change_message': {
-            return {
-                ...state,
-                messages: state.messages.map((m) => {
-                    if (m.id === state.selectedId) {
-                        return {
-                            ...m,
-                            message: action.message,
-                        };
-                    }
-                    return m;
-                }),
-            };
-        }
-        default: {
-            throw Error('未知 action: ' + action.type);
-        }
-    }
-};
+let nextId = 3;
 
 function App() {
-    // useReducer接收一个reducer(一个包含状态和action的js对象)和初始状态
-    const [state, dispatch] = useReducer(emailReducer, initialState);
-    const message = state.messages?.[state.selectedId];
-    const contact = contacts.find((c) => c.id === state.selectedId);
+    const [tasks, setTasks] = useState(initialTasks);
+    const handleAddTask = (text) => {
+        if (!text) return;
+        setTasks([
+            ...tasks,
+            {
+                id: nextId++,
+                text,
+                done: false,
+            },
+        ]);
+    };
+
+    const handleChangeTask = (task) => {
+        setTasks(
+            tasks.map((item) => {
+                if (item.id === task.id) {
+                    return task;
+                }
+                return item;
+            })
+        );
+    };
+
+    const handleDeleteTask = (id) => {
+        setTasks(tasks.filter((item) => item.id !== id));
+    };
 
     return (
-        <div>
-            <ContactList
-                contacts={contacts}
-                selectedId={state.selectedId}
-                dispatch={dispatch}
+        <>
+            <h1>day</h1>
+            <AddTask onAddTask={handleAddTask} />
+            <TaskList
+                tasks={tasks}
+                onChangeTask={handleChangeTask}
+                onDeleteTask={handleDeleteTask}
             />
-            <Chat
-                key={contact.id}
-                message={message}
-                contact={contact}
-                dispatch={dispatch}
-            />
-        </div>
+        </>
     );
 }
 
