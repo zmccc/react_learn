@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 import AddTask from './components/AddTask';
 import TaskList from './components/TaskList';
 
@@ -9,33 +9,58 @@ const initialTasks = [
 ];
 let nextId = 3;
 
+function taskReducer(tasks, action) {
+    switch (action.type) {
+        case 'add_task': {
+            return [
+                ...tasks,
+                {
+                    id: nextId++,
+                    text: action.text,
+                    done: false,
+                },
+            ];
+        }
+        case 'change_task': {
+            return tasks.map((item) => {
+                if (item.id === action.id) {
+                    let { type, ...other } = action;
+                    return other;
+                }
+                return item;
+            });
+        }
+        case 'delete_task': {
+            return tasks.filter((item) => item.id !== action.id);
+        }
+        default: {
+            throw Error(`未知type: ${action.type}`);
+        }
+    }
+}
+
 function App() {
-    const [tasks, setTasks] = useState(initialTasks);
+    const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
     const handleAddTask = (text) => {
         if (!text) return;
-        setTasks([
-            ...tasks,
-            {
-                id: nextId++,
-                text,
-                done: false,
-            },
-        ]);
+        dispatch({
+            type: 'add_task',
+            text,
+        });
     };
 
     const handleChangeTask = (task) => {
-        setTasks(
-            tasks.map((item) => {
-                if (item.id === task.id) {
-                    return task;
-                }
-                return item;
-            })
-        );
+        dispatch({
+            type: 'change_task',
+            ...task,
+        });
     };
 
     const handleDeleteTask = (id) => {
-        setTasks(tasks.filter((item) => item.id !== id));
+        dispatch({
+            type: 'delete_task',
+            id,
+        });
     };
 
     return (
