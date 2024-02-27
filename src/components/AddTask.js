@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { TasksDispatchContext } from '../TasksContext';
 
-export default function AddTask(props) {
+export default function AddTask() {
     const [text, setText] = useState('');
+    const dispatch = useContext(TasksDispatchContext);
 
     return (
         <Wrap>
@@ -14,7 +16,10 @@ export default function AddTask(props) {
             />
             <button
                 onClick={() => {
-                    props.onAddTask(text);
+                    dispatch({
+                        type: 'add_task',
+                        text,
+                    });
                     setText('');
                 }}
             >

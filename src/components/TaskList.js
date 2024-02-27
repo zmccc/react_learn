@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Task from './Task';
 import styled from 'styled-components';
+import { TasksContext } from '../TasksContext';
 
-export default function TaskList(props) {
+export default function TaskList() {
+    const tasks = useContext(TasksContext);
+
     return (
         <Wrap>
             <ol>
-                {props.tasks.map((t) => (
+                {tasks.map((t) => (
                     <li key={t.id}>
-                        <Task
-                            task={t}
-                            onChangeTask={props.onChangeTask}
-                            onDeleteTask={props.onDeleteTask}
-                        />
+                        <Task task={t} />
                     </li>
                 ))}
             </ol>

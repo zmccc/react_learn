@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { TasksDispatchContext } from '../TasksContext';
 
 export default function Task(props) {
     const [isEdit, setIsEdit] = useState(false);
+    const dispatch = useContext(TasksDispatchContext);
 
     return (
         <Wrap>
@@ -11,7 +13,8 @@ export default function Task(props) {
                     type='checkbox'
                     checked={props.task.done}
                     onChange={(e) => {
-                        props.onChangeTask({
+                        dispatch({
+                            type: 'change_task',
                             ...props.task,
                             done: e.target.checked,
                         });
@@ -22,7 +25,8 @@ export default function Task(props) {
                         <input
                             value={props.task.text}
                             onChange={(e) => {
-                                props.onChangeTask({
+                                dispatch({
+                                    type: 'change_task',
                                     ...props.task,
                                     text: e.target.value,
                                 });
@@ -39,7 +43,10 @@ export default function Task(props) {
             </label>
             <button
                 onClick={() => {
-                    props.onDeleteTask(props.task.id);
+                    dispatch({
+                        type: 'delete_task',
+                        id: props.task.id,
+                    });
                 }}
             >
                 delete

@@ -1,6 +1,7 @@
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import AddTask from './components/AddTask';
 import TaskList from './components/TaskList';
+import { TasksContext, TasksDispatchContext } from './TasksContext';
 
 const initialTasks = [
     { id: 0, text: 'Philosopher’s Path', done: true },
@@ -41,38 +42,15 @@ function taskReducer(tasks, action) {
 
 function App() {
     const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
-    const handleAddTask = (text) => {
-        if (!text) return;
-        dispatch({
-            type: 'add_task',
-            text,
-        });
-    };
-
-    const handleChangeTask = (task) => {
-        dispatch({
-            type: 'change_task',
-            ...task,
-        });
-    };
-
-    const handleDeleteTask = (id) => {
-        dispatch({
-            type: 'delete_task',
-            id,
-        });
-    };
 
     return (
-        <>
-            <h1>day</h1>
-            <AddTask onAddTask={handleAddTask} />
-            <TaskList
-                tasks={tasks}
-                onChangeTask={handleChangeTask}
-                onDeleteTask={handleDeleteTask}
-            />
-        </>
+        <TasksContext.Provider value={tasks}>
+            <TasksDispatchContext.Provider value={dispatch}>
+                <h1>day</h1>
+                <AddTask />
+                <TaskList />
+            </TasksDispatchContext.Provider>
+        </TasksContext.Provider>
     );
 }
 
