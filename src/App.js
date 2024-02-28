@@ -1,14 +1,19 @@
-import AddTask from './components/AddTask';
-import TaskList from './components/TaskList';
-import TasksProvider from './components/TasksProvider';
+import { useState } from 'react';
+import PlayGround from './components/PlayGround';
 
 function App() {
+    const [show, setShow] = useState(false);
     return (
-        <TasksProvider>
-            <h1>day</h1>
-            <AddTask />
-            <TaskList />
-        </TasksProvider>
+        <div>
+            <button
+                onClick={() => {
+                    setShow(!show);
+                }}
+            >
+                {show ? '卸载' : '挂载'}
+            </button>
+            {show && <PlayGround />}
+        </div>
     );
 }
 
