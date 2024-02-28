@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import useInput from './hooks/useInput';
 
 function App() {
-    const [firstName, setFirstName] = useState('hello');
-    const [lastName, setLastName] = useState('world');
+    const firstObj = useInput('hello');
+    const lastObj = useInput('world');
 
-    const fullName = firstName + ' ' + lastName;
+    const fullName = firstObj.value + ' ' + lastObj.value;
 
     // useEffect会在组件渲染到屏幕上时调用
     // 由于firstName改变触发重新渲染,等firstName改完在运行useEffect内到代码,导致再次触发一次页面渲染
@@ -18,17 +18,11 @@ function App() {
         <div>
             <div>
                 <span>first:</span>
-                <input
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                />
+                <input {...firstObj} />
             </div>
             <div>
                 <span>last:</span>
-                <input
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                />
+                <input {...lastObj} />
             </div>
             <span>{fullName}</span>
         </div>
